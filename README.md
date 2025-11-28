@@ -53,6 +53,7 @@ pip install git+https://github.com/open-quantum-safe/liboqs-python.git
 ### 2️⃣ Launch the server
 
 In a first terminal:
+
 ```
 python3 server.py
 ```
@@ -60,13 +61,46 @@ python3 server.py
 ### 3️⃣ Launch the client
 
 In a second terminal:
+
 ```
 python3 client.py
 ```
-
 
 ## Authors
 
 - Nicolas Magne
 - Jessica Devulder
 - Tainá Da Cruz
+
+---
+
+## 📷 Diagrams (English)
+
+The repository contains two diagram images illustrating the protocol flow and the component relationships. They are included in the project root as `diagrama_de_sequencia.png` and `UML.png`.
+
+### Sequence diagram
+
+![Sequence diagram](./diagrama_de_sequencia.png)
+
+Explanation (English):
+
+- The `Server` generates a Kyber key pair and sends its `public_key` to the `Client` via the TCP socket.
+- The `Client` receives the `public_key` and calls `encap_secret(pk)` on the KEM (liboqs). The KEM returns a `ciphertext` and the client's `shared_secret`.
+- The `Client` sends the `ciphertext` back to the `Server` over the socket.
+- The `Server` calls `decap_secret(ciphertext)` on the KEM using its secret key and recovers the same `shared_secret`.
+
+This diagram highlights the chronological message flow and the fact that both parties derive the same shared secret.
+
+---
+
+### Component / UML diagram
+
+![Component UML](./UML.png)
+
+Explanation (English):
+
+- The UML diagram shows the main components: `Server` (`server.py`), `TCP Socket`, `Client` (`client.py`) and the `KEM` (`oqs.KeyEncapsulation`).
+- Numbered steps indicate the flow: (1) server sends `public_key` → (2) client receives it → (3) client encapsulates using the KEM → (4) client sends `ciphertext` → (5) server receives ciphertext → (6) server decapsulates and obtains the shared secret.
+- The important security point: the KEM operations ensure `shared_secret_client == shared_secret_server` while only the `public_key` and `ciphertext` transit over the network.
+
+If you want, I can also embed the images as clickable thumbnails, or generate and commit PNGs from PlantUML source if you prefer the source-first workflow.
