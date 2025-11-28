@@ -18,8 +18,10 @@ import argparse
 import sys
 from oqs import KeyEncapsulation
 
+
 def send_bytes(conn: socket.socket, b: bytes) -> None:
     conn.sendall(struct.pack("!I", len(b)) + b)
+
 
 def recv_bytes(conn: socket.socket) -> bytes:
     header = conn.recv(4)
@@ -33,6 +35,7 @@ def recv_bytes(conn: socket.socket) -> bytes:
             raise ConnectionError("Conexão fechada durante recebimento de dados")
         data += chunk
     return data
+
 
 def main(host: str, port: int, algorithm: str):
     print(f"[CLIENT] Conectando a {host}:{port} usando KEM = {algorithm}")
@@ -58,12 +61,14 @@ def main(host: str, port: int, algorithm: str):
 
         # encapsulate -> (ciphertext, shared_secret)
         try:
-            ciphertext, ss_cliente = kem.encapsulate(pk)
+            ciphertext, ss_cliente = kem.encap_secret(pk)
         except Exception as e:
             print(f"[ERRO] encapsulate falhou: {e}")
             return
 
-        print(f"[CLIENT] Encapsulate concluído. ciphertext tamanho = {len(ciphertext)} bytes.")
+        print(
+            f"[CLIENT] Encapsulate concluído. ciphertext tamanho = {len(ciphertext)} bytes."
+        )
 
         # envia ciphertext ao servidor
         send_bytes(s, ciphertext)
@@ -80,11 +85,18 @@ def main(host: str, port: int, algorithm: str):
     except Exception:
         pass
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cliente KEM (Kyber) - exemplo")
-    parser.add_argument("--host", type=str, default="127.0.0.1", help="Endereço do servidor")
+    parser.add_argument(
+        "--host", type=str, default="127.0.0.1", help="Endereço do servidor"
+    )
     parser.add_argument("--port", type=int, default=5000, help="Porta do servidor")
-    parser.add_argument("--alg", type=str, default="Kyber768",
-                        help="Nome do algoritmo KEM (ex: Kyber512, Kyber768, Kyber1024)")
+    parser.add_argument(
+        "--alg",
+        type=str,
+        default="Kyber768",
+        help="Nome do algoritmo KEM (ex: Kyber512, Kyber768, Kyber1024)",
+    )
     args = parser.parse_args()
     main(args.host, args.port, args.alg)

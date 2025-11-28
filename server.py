@@ -22,9 +22,11 @@ from oqs import KeyEncapsulation  # liboqs-python
 HOST = "0.0.0.0"
 PORT = 5000
 
+
 def send_bytes(conn: socket.socket, b: bytes) -> None:
     """Envia um bloco de bytes com prefixo de 4 bytes (big-endian) com o tamanho."""
     conn.sendall(struct.pack("!I", len(b)) + b)
+
 
 def recv_bytes(conn: socket.socket) -> bytes:
     """Recebe primeiro 4 bytes de tamanho e depois lê exatamente esse número de bytes."""
@@ -40,6 +42,7 @@ def recv_bytes(conn: socket.socket) -> bytes:
         data += chunk
     return data
 
+
 def main(algorithm: str):
     print(f"[SERVER] Iniciando servidor na porta {PORT} usando KEM = {algorithm}")
 
@@ -51,7 +54,10 @@ def main(algorithm: str):
         sys.exit(1)
 
     try:
-        public_key, secret_key = kem.generate_keypair()
+        # public_key, secret_key = kem.generate_keypair()
+        public_key = kem.generate_keypair()  # Clé publique
+        secret_key = kem.export_secret_key()  # Clé secrète
+
     except Exception as e:
         print(f"[ERRO] falha ao gerar par de chaves: {e}")
         sys.exit(1)
@@ -83,7 +89,7 @@ def main(algorithm: str):
 
             # decapsulate usando a secret_key
             try:
-                ss_servidor = kem.decapsulate(ciphertext, secret_key)
+                ss_servidor = kem.decap_secret(ciphertext)
             except Exception as e:
                 print(f"[ERRO] decapsulate falhou: {e}")
                 return
@@ -100,9 +106,14 @@ def main(algorithm: str):
     except Exception:
         pass
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Servidor KEM (Kyber) - exemplo")
-    parser.add_argument("--alg", type=str, default="Kyber768",
-                        help="Nome do algoritmo KEM (ex: Kyber512, Kyber768, Kyber1024)")
+    parser.add_argument(
+        "--alg",
+        type=str,
+        default="Kyber768",
+        help="Nome do algoritmo KEM (ex: Kyber512, Kyber768, Kyber1024)",
+    )
     args = parser.parse_args()
     main(args.alg)
