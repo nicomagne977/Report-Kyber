@@ -82,7 +82,7 @@ The repository contains two diagram images illustrating the protocol flow and th
 
 ![Sequence diagram](./diagrama_de_sequencia.png)
 
-Explanation (English):
+Explanation :
 
 - The `Server` generates a Kyber key pair and sends its `public_key` to the `Client` via the TCP socket.
 - The `Client` receives the `public_key` and calls `encap_secret(pk)` on the KEM (liboqs). The KEM returns a `ciphertext` and the client's `shared_secret`.
@@ -97,7 +97,7 @@ This diagram highlights the chronological message flow and the fact that both pa
 
 ![Component UML](./UML.png)
 
-Explanation (English):
+Explanation :
 
 - The UML diagram shows the main components: `Server` (`server.py`), `TCP Socket`, `Client` (`client.py`) and the `KEM` (`oqs.KeyEncapsulation`).
 - Numbered steps indicate the flow: (1) server sends `public_key` → (2) client receives it → (3) client encapsulates using the KEM → (4) client sends `ciphertext` → (5) server receives ciphertext → (6) server decapsulates and obtains the shared secret.
