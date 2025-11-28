@@ -1,71 +1,72 @@
-# 🛡️ Échange de Clés Post-Quantiques avec CRYSTALS-Kyber (Kyber-768)
+# 🛡️ Post-Quantum Key Exchange with CRYSTALS-Kyber (Kyber-768)
 
-Ce projet implémente un **protocole d’échange de clés sécurisé post-quantique** basé sur le schéma KEM **CRYSTALS-Kyber (Kyber-768)**, utilisant la bibliothèque **Open Quantum Safe (liboqs)**.
-Il montre comment un **client** et un **serveur** peuvent établir un secret partagé sécurisé même en présence d’un attaquant interceptant les communications.
-
----
-
-## 📌 Objectifs du projet
-
-- Implémenter un échange de clés **post-quantique** avec Kyber-768
-- Créer une communication **client-serveur** en Python
-- Générer et échanger un **ciphertext**
-- Démontrer que les deux parties obtiennent le **même secret partagé**
-- Fournir des **évidences** de fonctionnement (logs, captures d'écran)
+This project implements a **secure post-quantum key exchange protocol** based on the **CRYSTALS-Kyber (Kyber-768)** KEM scheme, using the **Open Quantum Safe (liboqs)** library.
+It shows how a **client** and a **server** can establish a secure shared secret even in the presence of an attacker intercepting communications.
 
 ---
 
-## 🧩 Architecture du système
+## 📌 Project objectives
 
-### Serveur
+- Implement a **post-quantum** key exchange with Kyber-768
+- Create **client-server** communication in Python
+- Generate and exchange a **ciphertext**
+- Demonstrate that both parties obtain the **same shared secret**
+- Provide **evidence** of operation (logs, screenshots)
 
-- Génère une paire de clés Kyber-768
-- Envoie sa **clé publique** au client
-- Reçoit le **ciphertext**
-- Déchiffre pour récupérer le **secret partagé**
+---
+
+## 🧩 System architecture
+
+### Server
+
+- Generates a Kyber-768 key pair
+- Sends its **public key** to the client
+- Receives the **ciphertext**
+- Decrypts to retrieve the **shared secret**
 
 ### Client
 
-- Reçoit la clé publique du serveur
-- Encapsule un secret → produit un **ciphertext**
-- Envoie ce ciphertext au serveur
-- Obtient localement son **secret partagé**
+- Receives the server's public key
+- Encapsulates a secret → produces a **ciphertext**
+- Sends this ciphertext to the server
+- Obtains its **shared secret** locally
 
-### Résultat attendu
+### Expected result
 
-Les deux valeurs doivent être **identiques** :
+The two values must be **identical**:
 shared_secret_client == shared_secret_server
 
-Le ciphertext doit mesurer environ **1088 bytes** (taille typique pour Kyber-768).
+The ciphertext should be approximately **1088 bytes** (typical size for Kyber-768).
 
 ---
 
-## 🚀 Exécution du projet
+## 🚀 Project execution
 
-### 1️⃣ Installer les dépendances
+### 1️⃣ Install dependencies
 
-Installe la version Python de liboqs :
+Install the Python version of liboqs:
 
 ```bash
 pip install git+https://github.com/open-quantum-safe/liboqs-python.git
-
-### 2️⃣ Lancer le serveur
-
-Dans un premier terminal :
-'''
-python3 server.py
-'''
-
-### 3️⃣ Lancer le client
-
-Dans un second terminal :
-'''
-python3 client.py
-'''
 ```
+
+### 2️⃣ Launch the server
+
+In a first terminal:
+```
+python3 server.py
+```
+
+### 3️⃣ Launch the client
+
+In a second terminal:
+```
+python3 client.py
+```
+
 
 ## Authors
 
 - Nicolas Magne
 - Jessica Devulder
-- Tania DaCruz
+- Tainá Da Cruz
