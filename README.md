@@ -74,7 +74,7 @@ python3 client.py
 
 ---
 
-## 📷 Diagrams (English)
+## 📷 Diagrams
 
 The repository contains two diagram images illustrating the protocol flow and the component relationships. They are included in the project root as `diagrama_de_sequencia.png` and `UML.png`.
 
